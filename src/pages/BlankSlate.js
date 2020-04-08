@@ -62,6 +62,27 @@ export default class BlankSlate extends Component {
 						<path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z' />
 					</svg></button>
 
+				{this.state.menuOpen && <div className='Reviews-list'>
+					<ul> {/* tabIndex just for demo purposes */}
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+						<li tabIndex='0'>Lorem ipsum dolor sit amet.</li>
+					</ul>
+				</div>}
+
 				<button className='Menu-btn' onClick={this.handleMenuClick}>
 					<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
 						<path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
