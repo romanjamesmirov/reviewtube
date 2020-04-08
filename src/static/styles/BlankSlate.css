@@ -1,0 +1,89 @@
+.Grid-container {
+	max-width: 60rem;
+	padding: 1.5rem;
+	display: grid;
+	gap: 1.5rem;
+}
+
+.Editor-container, .Video-link, .Timestamp {
+	-webkit-appearance: none;
+	display: block;
+	padding: 0.55rem;
+	border: none;
+	border-bottom: 0.1rem solid #eee;
+	border-radius: 0.2rem;
+}
+
+.Timestamp-container {
+	display: flex; 
+	align-items: center;
+}
+
+.Timestamp {
+	width: 100%;
+}
+
+.public-DraftEditorPlaceholder-root, 
+.public-DraftEditorPlaceholder-hasFocus,
+::placeholder {
+	color: #888;
+}
+
+.Changes-saved {
+	font-size: 0.8em;
+	color: #aaa;
+	text-align: right;
+	padding: 1.5rem 1.5rem 0;
+}
+
+.Continue-btn {
+	margin: 0 auto;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	display: block;
+	cursor: pointer;
+}
+
+.Menu-btn {
+	position: fixed;
+	bottom: 1.5rem;
+	right: 1.5rem;
+	background-color: #fff;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	display: block;
+}
+
+.Continue-btn svg, .Menu-btn svg {
+	fill: #aaa;
+	width: 2em;
+}
+
+@media screen and (min-width: 600px) {
+	.Grid-container {
+		margin: 0 auto;
+		grid-template-columns: 8rem 1fr;
+	}
+	
+	.Video-link {
+		grid-column-start: 2;
+		grid-column-end: 3;
+	}
+
+	.Changes-saved {
+		margin: 0 auto;
+		max-width: 60rem;
+	}
+}
+
+@media screen and (min-width: 900px) {
+	.Grid-container {
+		padding-right: 9.5rem;
+	}
+
+	.Changes-saved {
+		max-width: 44rem;
+	}
+}
