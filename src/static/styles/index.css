@@ -34,4 +34,8 @@ p > a {
 /* Some weird extra space between the bottom and the container's bottom and it's not padding nor margin */
 img, svg {
   display: block; 
+} 
+
+button {
+  cursor: pointer; /* Not sure why this isn't the default */
 }
