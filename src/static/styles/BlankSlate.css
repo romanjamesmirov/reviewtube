@@ -83,14 +83,11 @@ nav.open + main .Menu-btn {
 }
 
 /* CHILDREN */
-.Editor-container, .Video-link, .Timestamp {
+.Video-link, .Timestamp, .Comment {
 	padding: 0.55rem;
 	border: none;
 	border-bottom: 0.1rem solid #eee;
 	border-radius: 0.2rem;
-}
-
-.Video-link, .Timestamp {
 	-webkit-appearance: none;
 	display: block;
 }
@@ -102,13 +99,6 @@ nav.open + main .Menu-btn {
 
 .Timestamp {
 	width: 100%;
-}
-
-/* draft.js's placeholder colors */
-.public-DraftEditorPlaceholder-root, 
-.public-DraftEditorPlaceholder-hasFocus,
-::placeholder {
-	color: #888;
 }
 
 .Add-btn svg {

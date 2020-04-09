@@ -1,10 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, convertFromHTML, ContentState } from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import '../static/styles/BlankSlate.css'
-
-const comment1 = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML('<b>Hey!</b>').contentBlocks, convertFromHTML('<b>Hey!</b>').entityMap))
-// const rawJS = convertToRaw(this.state.editorState.getCurrentContent())
 
 export default class BlankSlate extends Component {
 	constructor(props) {
@@ -12,36 +8,27 @@ export default class BlankSlate extends Component {
 		this.state = {
 			menuOpen: false,
 			videoLink: '',
-			comments: [comment1],
+			comments: [''],
 			timestamps: ['']
 		}
-		this.onEditorChange = this.onEditorChange.bind(this)
-		this.onKeyCommand = this.onKeyCommand.bind(this)
-		this.onTimestampChange = this.onTimestampChange.bind(this)
+		this.onInputChange = this.onInputChange.bind(this)
 		this.onAddClick = this.onAddClick.bind(this)
 		this.onMenuClick = this.onMenuClick.bind(this)
 	}
-
-	onEditorChange(editorState) {
-		this.setState({ comments: [editorState] })
-	}
-
-	onKeyCommand(command, editorState) {
-		const newState = RichUtils.onKeyCommand(editorState, command)
-		if (newState) {
-			this.onEditorChange(newState)
-			return 'handled'
+	
+	onInputChange({ target }) {
+		if (target.classList.contains('Video-link')) this.setState({ videoLink: target.value })
+		else {
+			const property = target.classList.contains('Timestamp') ? 'timestamps' : 'comments'
+			const index = parseInt(target.getAttribute('data-index'))
+			let newValue = [...this.state[property]]
+			newValue[index] = target.value
+			this.setState({ [property]: newValue })
 		}
-		return 'not-handled'
-	}
-
-	onTimestampChange(e) {
-		const index = e.target.getAttribute('data-index')
-		this.setState({})
 	}
 
 	onAddClick() {
-
+		this.setState(state => ({ comments: [...state.comments, ''], timestamps: [...state.timestamps, ''] }))
 	}
 
 	onMenuClick() {
@@ -49,13 +36,12 @@ export default class BlankSlate extends Component {
 	}
 
 	render() {
-		let num = [1, 1, 1, 1]
 		return (
 			<Fragment>
 				<nav className={this.state.menuOpen ? 'open' : 'closed'}>
 					<ul className='Reviews-list'>
 						{/* tabIndex just for demo purposes */}
-						{num.map((el, index) => (
+						{[1,1,1,1,1,1].map((el, index) => (
 							<li key={index} tabIndex='0'>
 								<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
 									<path d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' /></svg>
@@ -68,26 +54,24 @@ export default class BlankSlate extends Component {
 					<p className='Changes-saved'><a href='#'>All changes saved</a></p>
 
 					<div className='Grid-container'>
-						<input type='url'
-							className='Video-link '
+						<input type='url' className='Video-link'
+							value={this.state.videoLink} onChange={this.onInputChange}
 							placeholder='Video link' />
 
-						{this.state.comments.map((el, index) => (
+						{this.state.comments.map((comment, index) => (
 							<Fragment key={index}>
 								<div className='Timestamp-container'>
-									<input type='text'
-										className='Timestamp'
+									<input type='text' className='Timestamp'
+										placeholder='Time'
 										value={this.state.timestamps[index]}
-										onChange={this.onTimestampChange}
-										placeholder='Time' /></div>
-
-								<div className='Editor-container'>
-									<Editor placeholder='Comment'
-										editorState={this.state.comments[index]}
-										onKeyCommand={this.onKeyCommand}
-										onChange={this.onEditorChange}
+										onChange={this.onInputChange}
 										data-index={index} /></div>
-							</Fragment>
+
+								<textarea className='Comment' placeholder='Comment'
+									value={comment}
+									onChange={this.onInputChange}
+									rows='1'
+									data-index={index} /></Fragment>
 						))}</div>
 
 					<button className='Add-btn' onClick={this.onAddClick}>
