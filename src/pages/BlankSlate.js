@@ -1,38 +1,88 @@
 import React, { Component, Fragment } from 'react'
-import 'draft-js/dist/Draft.css'
 import '../static/styles/BlankSlate.css'
 
 export default class BlankSlate extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			menuOpen: false,
+			reviews: [], // all your posts, pulled from localStorage
+			reviewsWerePulled: false,
+			menuOpen: true,
+			indexOfDisplayedReview: -1, // blank slate = -1, created review > -1
+			hasBeenCreated: true, // don't recreate reviews or save blank slates
 			videoLink: '',
 			comments: [''],
 			timestamps: ['']
 		}
+		this.createLS = this.createLS.bind(this)
+		this.updateLS = this.updateLS.bind(this)
 		this.onInputChange = this.onInputChange.bind(this)
 		this.onAddClick = this.onAddClick.bind(this)
 		this.onMenuClick = this.onMenuClick.bind(this)
+		this.onReviewItemClick = this.onReviewItemClick.bind(this)
 	}
-	
+
+	componentDidMount() {
+		this.setState({ reviews: this.pullReviews(), reviewsWerePulled: true })
+	}
+
+	componentDidUpdate() { // if review is not blank and it hasn't been created, create it; otherwise, update it (the currently displayed one in state.reviews)
+		if (!this.state.reviewsWerePulled) return
+		const { hasBeenCreated, videoLink, timestamps, comments } = this.state
+		const shouldCallCreate = !hasBeenCreated && videoLink !== '' && comments[0] !== ''
+		if (shouldCallCreate) this.createLS({ videoLink, timestamps, comments })
+	}
+
+	pullReviews() { // the R in CRUD; set state.reviews to localStorage.reviews; we only need to execute this initially
+		let reviews = localStorage.getItem('reviews')
+		reviews = JSON.parse(reviews)
+		if (reviews === null) localStorage.setItem('reviews', JSON.stringify([]))
+		return reviews === null ? [] : reviews
+	}
+
+	createLS(review) { // the C; pop newly-created review onto state.reviews and localStorage.reviews; execute when blank slate isn't blank anymore
+		if (this.state.hasBeenCreated) return
+		let { reviews } = this.state
+		reviews = [...reviews, review]
+		this.setState({ reviews, hasBeenCreated: true })
+		localStorage.setItem('reviews', JSON.stringify(reviews))
+	}
+
+	updateLS() { // the U; set localStorage.reviews to state.reviews; execute when updating an already-created review (one of the state.reviews elements)
+		let { indexOfDisplayedReview } = this.state
+		if (indexOfDisplayedReview === -1) return 
+		let { reviews, videoLink, timestamps, comments } = this.state
+		reviews = [...reviews]
+		timestamps = [...timestamps]
+		comments = [...comments]
+		reviews[indexOfDisplayedReview] = { videoLink, timestamps, comments }
+		localStorage.setItem('reviews', JSON.stringify(reviews))
+		this.setState({ reviews })
+	}
+
 	onInputChange({ target }) {
-		if (target.classList.contains('Video-link')) this.setState({ videoLink: target.value })
+		if (target.classList.contains('Video-link')) this.setState({ videoLink: target.value }, this.updateLS)
 		else {
 			const property = target.classList.contains('Timestamp') ? 'timestamps' : 'comments'
 			const index = parseInt(target.getAttribute('data-index'))
-			let newValue = [...this.state[property]]
+			const newValue = [...this.state[property]]
 			newValue[index] = target.value
-			this.setState({ [property]: newValue })
+			this.setState({ [property]: newValue }, this.updateLS)
 		}
 	}
 
 	onAddClick() {
-		this.setState(state => ({ comments: [...state.comments, ''], timestamps: [...state.timestamps, ''] }))
+		const timestamps = [...this.state.timestamps, '']
+		const comments = [...this.state.comments, '']
+		this.setState({ timestamps, comments })
 	}
 
-	onMenuClick() {
-		this.setState(state => ({ menuOpen: !state.menuOpen }))
+	onMenuClick() { this.setState(state => ({ menuOpen: !state.menuOpen })) }
+
+	onReviewItemClick({ target }, index) {
+		const review = this.state.reviews[index]
+		const { videoLink, timestamps, comments } = review
+		this.setState({ videoLink, timestamps, comments, indexOfDisplayedReview: index, hasBeenCreated: true })
 	}
 
 	render() {
@@ -40,12 +90,12 @@ export default class BlankSlate extends Component {
 			<Fragment>
 				<nav className={this.state.menuOpen ? 'open' : 'closed'}>
 					<ul className='Reviews-list'>
-						{/* tabIndex just for demo purposes */}
-						{[1,1,1,1,1,1].map((el, index) => (
-							<li key={index} tabIndex='0'>
-								<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-									<path d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' /></svg>
-								<span>Lorem ipsum dolor sit amet.</span></li>
+						{this.state.reviews.map((review, index) => (
+							<li key={index}>
+								<button onClick={e => this.onReviewItemClick(e, index)}>
+									<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+										<path d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' /></svg>
+									<span>{review.videoLink}</span></button></li>
 						))}
 					</ul>
 				</nav>
