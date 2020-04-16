@@ -7,17 +7,21 @@ body {
 }
 
 /* GRANDPARENTS */
-nav {
+.Nav {
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	width: 100%;
 	height: 0;
 	z-index: 500;
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch; /* See issue #1 */
 	transition: height 200ms ease;
 }
 
-nav.open {
+.Nav.open {
 	height: 50vh;
 }
 
@@ -40,14 +44,6 @@ main {
 	transition: padding-right 500ms ease;
 }
 
-.Reviews-list {
-	overflow-y: scroll;
-	background-color: #fff;
-	border-top: 1px solid #eee;
-	height: 50vh;
-	-webkit-overflow-scrolling: touch; /* See issue #1 */
-}
-
 .Menu-btn {
 	background-color: #fff;
 	border: 1px solid #eee;
@@ -61,17 +57,8 @@ main {
 	transition: bottom 200ms ease;
 }
 
-nav.open + main .Menu-btn {
+.Nav.open + main .Menu-btn {
 	bottom: calc(50vh + 1.5rem);
-}
-
-.Changes-saved {
-	font-size: 0.8em;
-	color: #aaa;
-	text-align: right;
-	padding: 1.5rem 1.5rem 0;
-	max-width: 768px;
-	transition: padding-right 500ms ease;
 }
 
 .Add-btn {
@@ -111,37 +98,60 @@ nav.open + main .Menu-btn {
 	fill: #ccc;
 }
 
-.Reviews-list li {
+.Nav li {
 	list-style-type: none;
-	padding: 1rem 1.5rem;
 	border-bottom: 1px solid #eee;
+}
+
+.Nav li > button {
+	padding: 1rem 1.5rem;
 	display: flex;
 	align-items: center;
+	background-color: inherit;
+	border: none;
+	color: #888;
 }
 
-.Reviews-list li:focus {
+.Nav .Displayed {
 	outline: none; /* just for demo purposes */
 	background-color: #eee;
+	color: #000;
 }
 
-.Reviews-list li svg {
+.Nav li .Trash {
+	margin-right: 1em;
+	border: none;
+	background-color: inherit;
+}
+
+.Nav li .Trash:hover svg, 
+.Nav li .Trash:focus svg {
+	fill: #222;
+}
+
+.Nav li svg {
 	width: 1em;
 	fill: #888;
-	margin-right: 1em;
 }
 
-.Reviews-list li span {
+.Nav li span {
 	display: block;
 	width: calc(100vw - 3rem - 2em);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	text-align: left;
+}
+
+.Nav .New-review button {
+	width: 100vw;
+	justify-content: center;
 }
 
 /* iPad */
 @media screen and (min-width: 768px) {
 	/* GRANDPARENTS */
-	nav {
+	.Nav {
 		top: 0;
 		left: -30vw;
 		width: 30vw;
@@ -149,7 +159,7 @@ nav.open + main .Menu-btn {
 		transition: left 200ms ease;
 	}
 
-	nav.open {
+	.Nav.open {
 		left: 0;
 	}
 
@@ -164,21 +174,18 @@ nav.open + main .Menu-btn {
 		transition: left 200ms ease;
 	}
 
-	nav.open + main {
+	.Nav.open + main {
 		left: 30vw;
 		width: 70vw;
 	}
 
 	/* PARENTS */
-	.Grid-container, .Changes-saved {
-		margin: 0 auto;
-	}
-
 	.Grid-container {
+		margin: 0 auto;
 		grid-template-columns: 8rem 1fr;
 	}
 
-	.Reviews-list {
+	.Nav {
 		height: 100vh;
 		border: none;
 		border-right: 1px solid #eee;
@@ -194,8 +201,12 @@ nav.open + main .Menu-btn {
 		grid-column-end: 3;
 	}
 
-	.Reviews-list li span {
+	.Nav li span {
 		width: calc(30vw - 3rem - 2em);
+	}
+
+	.Nav .New-review button {
+		width: 30vw;
 	}
 
 	.Menu-btn svg {
@@ -206,7 +217,7 @@ nav.open + main .Menu-btn {
 /* Macbook */
 @media screen and (min-width: 992px) {
 	/* PARENTS */
-	.Grid-container, .Changes-saved {
+	.Grid-container {
 		padding-right: 9.5rem;
 	}
 }
